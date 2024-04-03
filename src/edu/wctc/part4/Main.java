@@ -11,9 +11,10 @@ package edu.wctc.part4;
 public class Main {
 
     public static void main(String[] args) {
+        Company company = new Company();
         Employee employee = new Employee("Peter", "Piper", "333-33-3333");
 
-        employee.doFirstTimeOrientation("A101");
+        company.orientEmployee(employee,"A101");
         employee.printReport();
     }
 

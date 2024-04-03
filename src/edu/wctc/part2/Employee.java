@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
  * Review the tips in the document Encapsulation Checklist if needed.
  */
 public class Employee {
+    public final int MIN_NAME_LENGTH = 2;
+
     private String firstName;
     private String lastName;
     private String ssn;
@@ -33,28 +35,31 @@ public class Employee {
     private String cubeId;
     private LocalDate orientationDate;
 
-    public Employee(String firstName, String lastName, String ssn) {
+    public Employee(String firstName, String lastName, String ssn, String cubeId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
+
+        this.meetWithHrForBenefitAndSalaryInfo();
+        this.meetDepartmentStaff();
+        this.reviewDeptPolicies();
+        this.moveIntoCubicle(cubeId);
     }
 
     // Assume this must be performed first, and assume that an employee
     // would only do this once, upon being hired.
-    public void meetWithHrForBenefitAndSalaryInfo() {
-        metWithHr = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
-        String fmtDate = formatter.format(orientationDate);
+    private void meetWithHrForBenefitAndSalaryInfo() {
+        setMetWithHr(true);
+        String fmtDate = formatDateString(orientationDate);
         System.out.println(firstName + " " + lastName + " met with HR on "
                 + fmtDate);
     }
 
     // Assume this must be performed second, and assume that an employee
     // would only do this once, upon being hired.
-    public void meetDepartmentStaff() {
-        metDeptStaff = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
-        String fmtDate = formatter.format(orientationDate);
+    private void meetDepartmentStaff() {
+        setMetDeptStaff(true);
+        String fmtDate = formatDateString(orientationDate);
         System.out.println(firstName + " " + lastName + " met with dept staff on "
                 + fmtDate);
     }
@@ -63,9 +68,8 @@ public class Employee {
     // policies may change that this method may need to be called 
     // independently from other classes.
     public void reviewDeptPolicies() {
-        reviewedDeptPolicies = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
-        String fmtDate = formatter.format(orientationDate);
+        setReviewedDeptPolicies(true);
+        String fmtDate = formatDateString(orientationDate);
         System.out.println(firstName + " " + lastName + " reviewed dept policies on "
                 + fmtDate);
     }
@@ -74,12 +78,18 @@ public class Employee {
     // sometimes change office locations that this method may need to be called 
     // independently from other classes.
     public void moveIntoCubicle(String cubeId) {
-        this.cubeId = cubeId;
-        this.movedIn = true;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
-        String fmtDate = formatter.format(orientationDate);
+        setCubeId(cubeId);
+        setMovedIn(true);
+        String fmtDate = formatDateString(orientationDate);
         System.out.println(firstName + " " + lastName + " moved into cubicle "
                 + cubeId + " on " + fmtDate);
+    }
+
+    // helper method
+
+    private String formatDateString(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy");
+        return formatter.format(date);
     }
 
     public String getFirstName() {
@@ -90,6 +100,7 @@ public class Employee {
     // allowed through validation.
 
     public void setFirstName(String firstName) {
+        if(firstName.isBlank() || firstName.length() < MIN_NAME_LENGTH) throw new IllegalArgumentException("First name not updated, name must be at least 2 characters long!");
         this.firstName = firstName;
     }
 
@@ -98,6 +109,7 @@ public class Employee {
     }
 
     public void setLastName(String lastName) {
+        if(firstName.isBlank() || firstName.length() < MIN_NAME_LENGTH) throw new IllegalArgumentException("First name not updated, name must be at least 2 characters long!");
         this.lastName = lastName;
     }
 
@@ -105,7 +117,7 @@ public class Employee {
         return ssn;
     }
 
-    public void setSsn(String ssn) {
+    private void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
@@ -113,23 +125,39 @@ public class Employee {
         return metWithHr;
     }
 
+    private void setMetWithHr(boolean bool) {
+        metWithHr = bool;
+    }
+
     public boolean hasMetDeptStaff() {
         return metDeptStaff;
+    }
+
+    private void setMetDeptStaff(boolean bool) {
+        metDeptStaff = bool;
     }
 
     public boolean hasReviewedDeptPolicies() {
         return reviewedDeptPolicies;
     }
 
+    private void setReviewedDeptPolicies(boolean bool) {
+        reviewedDeptPolicies = bool;
+    }
+
     public boolean hasMovedIn() {
         return movedIn;
+    }
+
+    private void setMovedIn(boolean bool) {
+        movedIn = bool;
     }
 
     public String getCubeId() {
         return cubeId;
     }
 
-    public void setCubeId(String cubeId) {
+    private void setCubeId(String cubeId) {
         this.cubeId = cubeId;
     }
 
@@ -137,7 +165,7 @@ public class Employee {
         return orientationDate;
     }
 
-    public void setOrientationDate(LocalDate orientationDate) {
+    private void setOrientationDate(LocalDate orientationDate) {
         this.orientationDate = orientationDate;
     }
 }

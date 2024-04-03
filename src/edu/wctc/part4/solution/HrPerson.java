@@ -36,9 +36,8 @@ public class HrPerson {
             if (emp.getSsn().equals(ssn)) {
                 // if found run report
                 if (emp.hasMetWithHr() && emp.hasMetDeptStaff()
-                        && emp.hasReviewedDeptPolicies() && emp.hasMovedIn()) {
+                        && emp.hasReviewedDeptPolicies() && emp.hasMovedIn())
                     emp.printReport();
-                }
                 break;
             }
         }
